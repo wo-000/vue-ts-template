@@ -34,8 +34,8 @@ interface ICallback {
   (message?: string | Error | undefined): void;
 }
 
-const checkName = (value: string, callback: ICallback) => {
-  console.log(value, callback);
+const checkName = (rule: any, value: string, callback: ICallback) => {
+  console.log(rule, value, callback);
   if (value === "") {
     return callback(new Error("请输入正确的用户名"));
   } else {
@@ -43,7 +43,7 @@ const checkName = (value: string, callback: ICallback) => {
   }
 };
 
-const validatePass = (value: string, callback: ICallback) => {
+const validatePass = (rule: any, value: string, callback: ICallback) => {
   if (value === "") {
     callback(new Error("请输入正确的密码"));
   } else {
