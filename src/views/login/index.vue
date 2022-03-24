@@ -26,7 +26,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import type { FormInstance } from "element-plus";
+import type { FormInstance, FormItemRule } from "element-plus";
 
 const ruleFormRef = ref<FormInstance>();
 
@@ -34,8 +34,11 @@ interface ICallback {
   (message?: string | Error | undefined): void;
 }
 
-const checkName = (rule: any, value: string, callback: ICallback) => {
-  console.log(rule, value, callback);
+const checkName = (
+  rule: FormItemRule | FormItemRule[],
+  value: string,
+  callback: ICallback
+) => {
   if (value === "") {
     return callback(new Error("请输入正确的用户名"));
   } else {
@@ -43,7 +46,11 @@ const checkName = (rule: any, value: string, callback: ICallback) => {
   }
 };
 
-const validatePass = (rule: any, value: string, callback: ICallback) => {
+const validatePass = (
+  rule: FormItemRule | FormItemRule[],
+  value: string,
+  callback: ICallback
+) => {
   if (value === "") {
     callback(new Error("请输入正确的密码"));
   } else {
