@@ -11,5 +11,9 @@ import * as ElIcons from "@element-plus/icons-vue";
 for (const name in ElIcons) {
   app.component(name, (ElIcons as never)[name]);
 }
+// 全局使用svg 图标
+import SvgIcon from "@/components/SvgIcon.vue";
+app.component("svg-icon", SvgIcon);
+import "@/assets/svg/index";
 
 app.use(store).use(ElementPlus).use(router).mount("#app");
