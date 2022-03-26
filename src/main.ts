@@ -16,4 +16,7 @@ import SvgIcon from "@/components/SvgIcon.vue";
 app.component("svg-icon", SvgIcon);
 import "@/assets/svg/index";
 
+// mockJS
+import "@/mockJS";
+
 app.use(store).use(ElementPlus).use(router).mount("#app");
