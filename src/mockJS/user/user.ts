@@ -10,8 +10,8 @@ interface IUser {
   status: number;
 }
 
-function userData(): IUser {
-  const usersList: IUser = Mock.mock({
+function userData(): Array<IUser> {
+  const usersList: Array<IUser> = Mock.mock({
     "data|8": [
       {
         date: "@date('yyyy-MM-dd HH:mm:ss')",
@@ -21,7 +21,6 @@ function userData(): IUser {
         "age|18-100": 1,
       },
     ],
-    total: 8,
   });
   return usersList;
 }

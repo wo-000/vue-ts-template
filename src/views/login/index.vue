@@ -26,13 +26,35 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { key } from "@/store";
 import type { FormInstance, FormItemRule } from "element-plus";
+import { loginInfo } from "@/service/user/login";
 
+const stroe = useStore(key);
 const ruleFormRef = ref<FormInstance>();
+interface Ilogininfo {
+  id: number;
+  isAdmin: boolean;
+  username: string;
+  password: string;
+}
 
 interface ICallback {
   (message?: string | Error | undefined): void;
 }
+
+const router = useRouter();
+const ruleForm = reactive({
+  pass: "",
+  name: "",
+});
+
+const userLogin = reactive({
+  isLogin: 0,
+  userinfo: {},
+});
 
 const checkName = (
   rule: FormItemRule | FormItemRule[],
@@ -40,9 +62,22 @@ const checkName = (
   callback: ICallback
 ) => {
   if (value === "") {
-    return callback(new Error("请输入正确的用户名"));
+    callback(new Error("请输入正确的用户名"));
   } else {
-    callback();
+    loginInfo({}).then((data) => {
+      const userInfo = data.data as Array<Ilogininfo>;
+      userLogin.isLogin = userInfo.filter(
+        (item) => item.username === ruleForm.name
+      ).length;
+      if (userLogin.isLogin === 0) {
+        callback(new Error("请输入正确的用户名"));
+      } else {
+        userLogin.userinfo = userInfo.filter(
+          (item) => item.username === ruleForm.name
+        )[0];
+        callback();
+      }
+    });
   }
 };
 
@@ -54,14 +89,22 @@ const validatePass = (
   if (value === "") {
     callback(new Error("请输入正确的密码"));
   } else {
-    callback();
+    loginInfo({}).then((data) => {
+      const userInfo = data.data as Array<Ilogininfo>;
+      userLogin.isLogin = userInfo.filter(
+        (item) => item.password === ruleForm.pass
+      ).length;
+      if (userLogin.isLogin === 0) {
+        callback(new Error("请输入正确的密码"));
+      } else {
+        userLogin.userinfo = userInfo.filter(
+          (item) => item.username === ruleForm.name
+        )[0];
+        callback();
+      }
+    });
   }
 };
-
-const ruleForm = reactive({
-  pass: "",
-  name: "",
-});
 
 const rules = reactive({
   pass: [{ validator: validatePass, trigger: "blur" }],
@@ -72,8 +115,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      console.log(ruleForm, 555);
-      console.log("submit!");
+      router.push("/home");
+      stroe.dispatch("user/login", userLogin);
     } else {
       console.log("error submit!");
       return false;

@@ -1,18 +1,36 @@
-// import { ActionContext } from "vuex";
-
-export interface State {
+import { ActionContext } from "vuex";
+interface Ilogininfo {
+  id: number;
+  isAdmin: boolean;
   username: string;
-  age: number;
+  password: string;
+}
+export interface State {
+  isLogin: number;
+  userinfo: Ilogininfo;
 }
 
 const state = {
-  username: "username",
-  age: 20,
+  isLogin: 0,
+  userinfo: {},
+};
+
+const mutations = {
+  setUsername(state: State, params: State): void {
+    state.isLogin = params.isLogin;
+    state.userinfo = JSON.parse(JSON.stringify(params.userinfo));
+  },
+};
+
+const actions = {
+  login({ commit }: ActionContext<State, unknown>, params: State): void {
+    commit("setUsername", params);
+  },
 };
 
 export default {
   state,
-  mutations: {},
-  actions: {},
+  mutations,
+  actions,
   namespaced: true,
 };
