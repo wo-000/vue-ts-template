@@ -1,9 +1,11 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import store from "@/store";
 import Home from "../views/Home.vue";
 
 // 声明 meta和自定义的属性hidden
 declare module "vue-router" {
   interface RouteMeta {
+    requireAuth?: boolean;
     title: string;
     icon?: string;
   }
@@ -127,6 +129,27 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes: routes as unknown as RouteRecordRaw[],
+});
+
+router.beforeEach((to, from, next) => {
+  const userInfo = window.localStorage.getItem("userLogin") as string;
+  console.log(from);
+  if (userInfo) {
+    const isLogin = JSON.parse(userInfo).isLogin;
+    if (isLogin > 0) {
+      store.commit("getUrl", to.fullPath);
+      next();
+    } else {
+      next({ path: "/login" });
+    }
+  } else {
+    if (to.path === "/login") {
+      store.commit("getUrl", from.fullPath);
+      next();
+    } else {
+      next("/login");
+    }
+  }
 });
 
 export default router;

@@ -19,6 +19,7 @@ const mutations = {
   setUsername(state: State, params: State): void {
     state.isLogin = params.isLogin;
     state.userinfo = JSON.parse(JSON.stringify(params.userinfo));
+    window.localStorage.setItem("userLogin", JSON.stringify(state));
   },
 };
 

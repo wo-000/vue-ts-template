@@ -13,7 +13,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item>个人信息</el-dropdown-item>
-            <el-dropdown-item>退出 </el-dropdown-item>
+            <el-dropdown-item @click="loginOut">退出 </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -21,10 +21,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useStore } from "vuex";
-import { key } from "@/store";
-const stroe = useStore(key);
-const username = stroe.state.user.userinfo.username;
+import { useRouter } from "vue-router";
+const router = useRouter();
+const userInfo = window.localStorage.getItem("userLogin") as string;
+const username = userInfo && JSON.parse(userInfo).userinfo.username;
+const loginOut = () => {
+  window.localStorage.removeItem("userLogin");
+  router.push("/login");
+};
 </script>
 <style lang="scss" scoped>
 .header-wrap {
