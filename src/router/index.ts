@@ -1,11 +1,12 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import store from "@/store";
+import { shallowRef } from "vue";
 import Home from "../views/Home.vue";
 
 // 声明 meta和自定义的属性hidden
 declare module "vue-router" {
   interface RouteMeta {
-    requireAuth?: boolean;
+    isAdmin?: boolean;
     title: string;
     icon?: string;
   }
@@ -39,7 +40,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: "/home",
-        component: Home,
+        component: shallowRef(Home),
         meta: {
           title: "首页",
         },
@@ -71,6 +72,26 @@ const routes: Array<RouteRecordRaw> = [
     ],
   },
   {
+    path: "/login",
+    name: "Login",
+    hidden: true,
+    meta: {
+      title: "登录",
+    },
+    component: Login,
+  },
+  {
+    path: "/notfound",
+    name: "NotFound",
+    hidden: true,
+    meta: {
+      title: "404",
+    },
+    component: NotFound,
+  },
+];
+const userRoutes: Array<RouteRecordRaw> = [
+  {
     path: "/Users",
     name: "Users",
     meta: {
@@ -94,6 +115,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: "系统",
       icon: "Tools",
+      isAdmin: true,
     },
     component: Layout,
     children: [
@@ -106,39 +128,33 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
-  {
-    path: "/login",
-    name: "Login",
-    hidden: true,
-    meta: {
-      title: "登录",
-    },
-    component: Login,
-  },
-  {
-    path: "/notfound",
-    name: "NotFound",
-    hidden: true,
-    meta: {
-      title: "404",
-    },
-    component: NotFound,
-  },
 ];
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes: routes as unknown as RouteRecordRaw[],
 });
-
+let isLoad = true;
 router.beforeEach((to, from, next) => {
   const userInfo = window.localStorage.getItem("userLogin") as string;
-  console.log(from);
+  // console.log(from);
   if (userInfo) {
     const isLogin = JSON.parse(userInfo).isLogin;
+    // const isAdmin = JSON.parse(userInfo).userinfo.isAdmin;
     if (isLogin > 0) {
       store.commit("getUrl", to.fullPath);
-      next();
+      store.commit("setRouters", { routes, userRoutes });
+      const allRoutes = store.state.getUrl.allRouters as Array<RouteRecordRaw>;
+      // console.log(allRoutes, 100);
+      if (isLoad) {
+        for (const r of allRoutes) {
+          router.addRoute(r);
+        }
+        next({ ...to, replace: true });
+        isLoad = false;
+      } else {
+        next();
+      }
     } else {
       next({ path: "/login" });
     }
@@ -151,5 +167,4 @@ router.beforeEach((to, from, next) => {
     }
   }
 });
-
 export default router;

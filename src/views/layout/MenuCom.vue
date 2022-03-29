@@ -17,6 +17,8 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { key } from "@/store";
 import MenuItem from "./MenuItem.vue";
 
 // 左侧菜单收缩
@@ -29,7 +31,9 @@ const isCollapse = ref(false);
 // 路由
 const route = useRoute();
 const router = useRouter();
-const routesArr = router.options.routes;
+const store = useStore(key);
+const allRoutes = store.state.getUrl.allRouters;
+const routesArr = allRoutes;
 console.log(route, router);
 const showMenuActive = ref("/home");
 
