@@ -115,7 +115,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      router.push(stroe.state.getUrl.beforeUrl);
+      router.push("/");
       stroe.dispatch("user/login", userLogin);
     } else {
       console.log("error submit!");

@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import { btnPermission } from "@/untils/permission";
 import store from "@/store";
 import { shallowRef } from "vue";
 import Home from "../views/Home.vue";
@@ -9,6 +10,7 @@ declare module "vue-router" {
     isAdmin?: boolean;
     title: string;
     icon?: string;
+    rules?: Array<string>;
   }
   interface _RouteRecordBase {
     hidden?: string | number | boolean;
@@ -155,6 +157,7 @@ router.beforeEach((to, from, next) => {
       } else {
         next();
       }
+      store.commit("permissionArr", btnPermission(to));
     } else {
       next({ path: "/login" });
     }
