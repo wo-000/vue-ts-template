@@ -1,14 +1,23 @@
 <template>
   <div class="home">
-    <el-button>fa</el-button>
+    <div class="echarts-wrap" ref="echartsBox">
+      <echarts-com :option="optionBar"></echarts-com>
+      <echarts-com :option="optionLine"></echarts-com>
+      <echarts-com :option="optionPie"></echarts-com>
+    </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "Home",
-  components: {},
-});
+<script setup lang="ts">
+import EchartsCom from "@/components/EchartsCom.vue";
+import {
+  optionBar,
+  optionLine,
+  optionPie,
+} from "@/views/echartsOptions/barEcharts";
 </script>
+<style lang="scss" scoped>
+.echarts-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+</style>
