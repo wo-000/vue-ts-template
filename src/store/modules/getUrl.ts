@@ -8,6 +8,7 @@ export interface Url {
 interface IRouter {
   routes: RouteRecordRaw[];
   userRoutes?: RouteRecordRaw[];
+  notFoundRoute: RouteRecordRaw[];
 }
 
 const state: Url = {
@@ -34,8 +35,9 @@ const mutations = {
       addRoutes = addRoutes.filter((item: RouteRecordRaw) => {
         return !item.meta?.isAdmin;
       });
-
-      const rulesRoutes = (state.allRouters = params.routes.concat(addRoutes));
+      const rulesRoutes = (state.allRouters = params.routes
+        .concat(addRoutes)
+        .concat(params.notFoundRoute));
       addRoules(rulesRoutes);
       state.allRouters = rulesRoutes;
       // const addPermissionRoutes = deepRoute(
@@ -47,8 +49,9 @@ const mutations = {
       //   }
       // });
     } else {
-      const rulesAdminRoutes = (state.allRouters =
-        params.routes.concat(addRoutes));
+      const rulesAdminRoutes = (state.allRouters = params.routes
+        .concat(addRoutes)
+        .concat(params.notFoundRoute));
       addAdminRoules(rulesAdminRoutes);
       state.allRouters = rulesAdminRoutes;
       // console.log(deepRoute(state.allRouters as Array<RouteRecordRaw>));

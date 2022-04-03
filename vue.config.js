@@ -4,7 +4,7 @@ const resolve = (dir) => path.join(__dirname, dir);
 module.exports = {
   // 配置端口和跨域
   devServer: {
-    port: 8080,
+    port: 8888,
     proxy: {
       "/api": {
         target: "http://localhost:8080/",

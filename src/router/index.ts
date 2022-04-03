@@ -82,15 +82,15 @@ const routes: Array<RouteRecordRaw> = [
     },
     component: Login,
   },
-  {
-    path: "/notfound",
-    name: "NotFound",
-    hidden: true,
-    meta: {
-      title: "404",
-    },
-    component: NotFound,
-  },
+  // {
+  //   path: "/404",
+  //   name: "404",
+  //   hidden: true,
+  //   meta: {
+  //     title: "404",
+  //   },
+  //   component: NotFound,
+  // },
 ];
 const userRoutes: Array<RouteRecordRaw> = [
   {
@@ -132,6 +132,22 @@ const userRoutes: Array<RouteRecordRaw> = [
   },
 ];
 
+const notFoundRoute: Array<RouteRecordRaw> = [
+  {
+    path: "/404",
+    name: "404",
+    hidden: true,
+    meta: {
+      title: "404",
+    },
+    component: NotFound,
+  },
+  {
+    path: "/:pathMatch(.*)",
+    redirect: "/404",
+  },
+];
+
 const router = createRouter({
   history: createWebHashHistory(),
   routes: routes as unknown as RouteRecordRaw[],
@@ -145,7 +161,7 @@ router.beforeEach((to, from, next) => {
     // const isAdmin = JSON.parse(userInfo).userinfo.isAdmin;
     if (isLogin > 0) {
       store.commit("getUrl", to.fullPath);
-      store.commit("setRouters", { routes, userRoutes });
+      store.commit("setRouters", { routes, userRoutes, notFoundRoute });
       const allRoutes = store.state.getUrl.allRouters as Array<RouteRecordRaw>;
       // console.log(allRoutes, 100);
       if (isLoad) {
