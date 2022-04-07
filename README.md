@@ -1,24 +1,19 @@
-# vue-ts
+# vue3-ts 简易版模板
 
-## Project setup
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
 ```
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+### 包含路由模块、权限模块、登录模块等
 
 ### Customize configuration
+
 See [Configuration Reference](https://cli.vuejs.org/config/).
