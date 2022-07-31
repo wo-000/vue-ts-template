@@ -5,7 +5,6 @@
       <echarts-com :option="optionLine"></echarts-com>
       <echarts-com :option="optionPie"></echarts-com>
     </div>
-    <div>asdad</div>
   </div>
 </template>
 <script setup lang="ts">
